@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import YouTube from 'react-youtube';
 import { specialEvents } from "./specialEvents";
 import { teekkariQuestions } from "./teekkariQuestions";
 import { normalQuestions } from "./normalQuestions";
@@ -17,6 +18,22 @@ function App() {
   const timerRef = useRef(null);
   const beepRef = useRef(null);
 
+  const [showVideoPlayer, setShowVideoPlayer] = useState(false);
+  const [currentVideoId, setCurrentVideoId] = useState(''); 
+
+  const youtubeOptions = {
+    height: '300',
+    width: '480',
+    playerVars: {
+      playsinline: 1,
+      rel: 0,
+    }
+  };
+
+  const onPlayerReady = (event) => {
+    event.target.pauseVideo();
+  };
+
   const startGame = () => {
     const base = { never: [...normalQuestions.never], tasks: [...normalQuestions.tasks] };
     const ext = { never: [...teekkariQuestions.never, ...normalQuestions.never], tasks: [...teekkariQuestions.tasks, ...normalQuestions.tasks] };
@@ -26,16 +43,18 @@ function App() {
   };
 
   const getNext = () => {
-    // timer nyt ei katoa jos skippaa kysymyksen
-    // if (timerActive) {
-    //  clearInterval(timerRef.current);
-    //  clearInterval(beepRef.current);
-    //  setTimerActive(false);
-    //}
+
+    if (showVideoPlayer){
+        setShowVideoPlayer(false);
+        setCurrentVideoId('')
+    }
+
     const blockingEventActive = timerActive || roundsTurns > 0;
 
     if (Math.random() < 0.2 && !blockingEventActive) {
-      const pool = mode === "teekkari" ? specialEvents : specialEvents.filter(e => e.handler !== "timer");
+      const pool = mode === "teekkari" 
+      ? specialEvents 
+      : specialEvents.filter(e => e.handler !== "timer" && e.handler !=="youtube");
       if (!pool.length) {
         getNextNormalQuestion();
         return;
@@ -85,6 +104,10 @@ function App() {
         timerRef.current = setInterval(() => setTimeLeft(prev => prev <= 1 ? (clearInterval(timerRef.current), clearInterval(beepRef.current), setTimerActive(false), 0) : prev - 1), 1000);
         beepRef.current = setInterval(playBeep, 60000);
         playBeep();
+        break;
+      case "youtube":
+          setCurrentVideoId(ev.videoId);
+          setShowVideoPlayer(true);
         break;
       default:
         break;
@@ -138,7 +161,19 @@ function App() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
         <h2 className="text-2xl text-center mx-5 my-40 mb-4">{current}</h2>
+
         {timerActive && <div className="text-xl font-bold text-center mb-4">⏱️ {formatTime(timeLeft)}</div>}
+
+        {showVideoPlayer && <div className="video-overlay w-full h-full flex relative items-center justify-center"> 
+          <div className="video-container bg-white p-4 ">
+          <YouTube
+              videoId={currentVideoId}
+              opts={youtubeOptions}
+              onReady={onPlayerReady}
+            />
+          </div>
+          </div>}
+
         <button className="w-90 text-xl px-4 py-3 my-40 bg-rose-700 text-white rounded-2xl mb-4" onClick={getNext}>Seuraava</button>
         {roundsTurns > 0 && <div className="p-3 bg-rose-200 border border-pink-400 text-rose-800 rounded mb-2">{roundsName}: vuoroja jäljellä {roundsTurns}</div>}
       </div>

@@ -1,6 +1,6 @@
 export const teekkariQuestions = {
   never: [
-    "En ole koskaan laskenut epäoleellista integraalia huvikseni :D",
+    "En ole koskaan laskenut epäoleellista integraalia huvikseni :D", /*
     "En ole koskaan yrittänyt todistaa Fermat'n lausetta",
     "En ole koskaan eksynyt Hervannan kampuksella",
     "En ole koskaan laulanut teekkarilauluja julkisesti",
@@ -30,9 +30,15 @@ export const teekkariQuestions = {
     "En ole koskaan joutunut uusimaan ruotsin tenttejä (kirjallista tai suullista)",
     "En ole koskaan unohtanut mennä tenttiin",
     "En ole koskaan noussut seisomaan sitseillä (pitämään puhetta/suolattu)",
-    "En ole koskaan tehnyt kiljua"
-
-
+    "En ole koskaan tehnyt kiljua",
+    "En ole koskaan suorittanut emäteemua",
+    "En ole koskaan ommellut merkkiä ompelukoneella",
+    "En ole koskaan antanut toisen ihmisen ommella merkkejä haalariini puolestani",
+    "En tiedä missä kaikki kiltahuoneet sijaitsevat",
+    "En ole liikkunut kampuksella alasti",
+    "En ole koskaan päässyt tenttiä vasta 3. kerralla läpi.",
+    "En ole koskaan opiskellut aiempaa tutkintoa",*/
+    "En ole koskaan käynyt Konetalon EXAM-luokassa"
   ],
   tasks: [
     "Valitse huora. Huorasi juo aina, kun itse juot. Huoria voi ketjuttaa.",
@@ -42,6 +48,7 @@ export const teekkariQuestions = {
     "Fuksipisteesi jaettuna 100 = montako annat",
     "Keskiarvo sisussa = montako juot",
     "Viimeisin kurssiarvosanasi = montako annat",
-    "Jos ole et päässyt läpi pakollisesta kurssista, otat shotin"
+    "Jos ole et päässyt läpi pakollisesta kurssista, otat shotin",
+    "Kuka ravaa uusintatenteissä? Hänelle shotti."
   ]
 };
