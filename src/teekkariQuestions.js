@@ -14,12 +14,34 @@ export const teekkariQuestions = {
     "ChatGPT ei ole tehnyt esseetä puolestani",
     "En ole koskaan kirjoittanut kurssipalautteeseen mitään muuta kuin 'hyvä kurssi'",
     "En ole koskaan palauttanut 10min sisään palautusikkunan sulkeutumisesta jotain",
-    "Se, joka tietää tai selvittää järjestysluvun kalsiumille saa antaa 3 hörppyä."
+    "Se, joka tietää tai selvittää järjestysluvun kalsiumille saa antaa 3 hörppyä.",
+    "En ole koskaan pelannut Herwantapeliä",
+    "En ole koskaan nukahtanu kiltaan / kerhohuoneelle",
+    "En ole koskaan käynyt Skellarissa",
+    "En ole käynyt toisessa kaupungissa opiskelijatapahtumassa",
+    "En ole koskaan käynyt tutapk luennolla",
+    "En ole koskaan nukkunut luennolla",
+    "En ole oksentanut kampuksella",
+    "En ole mennyt ensimmäisellä (~04) bussilla/ratikalla kotiin",
+    "En ole ollut yli 24h humalassa ilman unta",
+    "En ole koskaan suorittanut mallasmaratonia",
+    "En ole syönyt Zarillon opiskelijabursaa",
+    "En ole nauttinut Konehuoneen perjantain siipiä",
+    "En ole koskaan joutunut uusimaan ruotsin tenttejä (kirjallista tai suullista)",
+    "En ole koskaan unohtanut mennä tenttiin",
+    "En ole koskaan noussut seisomaan sitseillä (pitämään puhetta/suolattu)",
+    "En ole koskaan tehnyt kiljua"
+
+
   ],
   tasks: [
     "Valitse huora. Huorasi juo aina, kun itse juot. Huoria voi ketjuttaa.",
     "Flirttaile kuin average teekkari",
     "Selitä Newtonin 3. laki. Jos et osaa, shotti.",
-    "Selitä mitä siis oikeasti opiskelet ?"
+    "Selitä mitä siis oikeasti opiskelet ?",
+    "Fuksipisteesi jaettuna 100 = montako annat",
+    "Keskiarvo sisussa = montako juot",
+    "Viimeisin kurssiarvosanasi = montako annat",
+    "Jos ole et päässyt läpi pakollisesta kurssista, otat shotin"
   ]
 };

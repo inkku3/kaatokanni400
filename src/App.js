@@ -26,31 +26,50 @@ function App() {
   };
 
   const getNext = () => {
-    if (timerActive) {
-      clearInterval(timerRef.current);
-      clearInterval(beepRef.current);
-      setTimerActive(false);
-    }
-    if (Math.random() < 0.2) {
+    // timer nyt ei katoa jos skippaa kysymyksen
+    // if (timerActive) {
+    //  clearInterval(timerRef.current);
+    //  clearInterval(beepRef.current);
+    //  setTimerActive(false);
+    //}
+    const blockingEventActive = timerActive || roundsTurns > 0;
+
+    if (Math.random() < 0.2 && !blockingEventActive) {
       const pool = mode === "teekkari" ? specialEvents : specialEvents.filter(e => e.handler !== "timer");
+      if (!pool.length) {
+        getNextNormalQuestion();
+        return;
+      }
+
       const ev = pool[Math.floor(Math.random() * pool.length)];
       handleEvent(ev);
     } else {
-      const isNever = Math.random() < 0.7;
-      const type = isNever ? "never" : "tasks";
-      let list = [...available[type]];
-      if (!list.length) {
-        refill(type);
-        return;
-      }
-      const idx = Math.floor(Math.random() * list.length);
-      const q = list.splice(idx, 1)[0];
-      setAvailable(prev => ({ ...prev, [type]: list }));
-      setCurrent(q);
-      setCurrentType(type);
+        getNextNormalQuestion();
     }
-    if (roundsTurns > 0) setRoundsTurns(prev => prev - 1);
+    if (roundsTurns > 0) {
+        const newRoundsTurns = roundsTurns-1;
+        setRoundsTurns(newRoundsTurns);
+
+        if (newRoundsTurns <= 0){
+          setRoundsName("");
+        }
+    }
   };
+  const getNextNormalQuestion= () => {
+    const isNever = Math.random() < 0.7;
+    const type = isNever ? "never" : "tasks";
+    let list = [...available[type]];
+    if (!list.length) {
+      refill(type);
+      return;
+    }
+    const idx = Math.floor(Math.random() * list.length);
+    const q = list.splice(idx, 1)[0];
+    setAvailable(prev => ({ ...prev, [type]: list }));
+    setCurrent(q);
+    setCurrentType(type);
+  }
+  
 
   const handleEvent = ev => {
     setCurrent(ev.text);
@@ -65,6 +84,7 @@ function App() {
         setTimerActive(true);
         timerRef.current = setInterval(() => setTimeLeft(prev => prev <= 1 ? (clearInterval(timerRef.current), clearInterval(beepRef.current), setTimerActive(false), 0) : prev - 1), 1000);
         beepRef.current = setInterval(playBeep, 60000);
+        playBeep();
         break;
       default:
         break;
@@ -87,7 +107,7 @@ function App() {
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start();
-    setTimeout(() => osc.stop(), 300);
+    setTimeout(() => osc.stop(), 600);
   };
 
   const formatTime = secs => `${Math.floor(secs / 60)}:${secs % 60 < 10 ? '0' : ''}${secs % 60}`;
@@ -117,9 +137,9 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-        <h2 className="text-2xl text-center mb-4">{current}</h2>
+        <h2 className="text-2xl text-center mx-5 my-40 mb-4">{current}</h2>
         {timerActive && <div className="text-xl font-bold text-center mb-4">⏱️ {formatTime(timeLeft)}</div>}
-        <button className="w-90 px-4 py-3 bg-rose-700 text-white rounded-2xl mb-4" onClick={getNext}>Anna lisää</button>
+        <button className="w-90 text-xl px-4 py-3 my-40 bg-rose-700 text-white rounded-2xl mb-4" onClick={getNext}>Seuraava</button>
         {roundsTurns > 0 && <div className="p-3 bg-rose-200 border border-pink-400 text-rose-800 rounded mb-2">{roundsName}: vuoroja jäljellä {roundsTurns}</div>}
       </div>
   );
