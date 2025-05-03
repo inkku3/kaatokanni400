@@ -1,6 +1,6 @@
 export const teekkariQuestions = {
   never: [
-    "En ole koskaan laskenut epäoleellista integraalia huvikseni :D", /*
+    "En ole koskaan laskenut epäoleellista integraalia huvikseni :D",
     "En ole koskaan yrittänyt todistaa Fermat'n lausetta",
     "En ole koskaan eksynyt Hervannan kampuksella",
     "En ole koskaan laulanut teekkarilauluja julkisesti",
@@ -37,7 +37,7 @@ export const teekkariQuestions = {
     "En tiedä missä kaikki kiltahuoneet sijaitsevat",
     "En ole liikkunut kampuksella alasti",
     "En ole koskaan päässyt tenttiä vasta 3. kerralla läpi.",
-    "En ole koskaan opiskellut aiempaa tutkintoa",*/
+    "En ole koskaan opiskellut aiempaa tutkintoa",
     "En ole koskaan käynyt Konetalon EXAM-luokassa"
   ],
   tasks: [

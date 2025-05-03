@@ -1,6 +1,6 @@
 export const normalQuestions = {
   never: [
-    "En ole viikon sisään syönyt jotain lattialta",/*
+    "En ole viikon sisään syönyt jotain lattialta",
     "En ole teeskennellyt tietäväni julkkiksen, mistä muut puhuvat",
     "En ole koskaan valehdellut ikääni",
     "En ole koskaan varastanut ruokaa",
@@ -9,11 +9,11 @@ export const normalQuestions = {
     "En ole oksentanut baariin (aei vessaan)",
     "En ole ostanut viimeisillä rahoillani alkoholia ruoan sijaan",
     "En ole koskaan kärsinyt useamman päivän kestoista krapulaa",
-    "En ole koskaan nukkunut opiskelutoverini kanssa",*/
+    "En ole koskaan nukkunut opiskelutoverini kanssa",
     "En ole koskaan sammunut ennen klo 21"
   ],
   tasks: [
-    "Päättäkää kategoria (esim. puhelinmerkit) ja sanokaa vuorotellen siihen kuuluvia asiota. Jos ei enää keksi 10s sisään uutta, juo 3.",/*
+    "Päättäkää kategoria (esim. puhelinmerkit) ja sanokaa vuorotellen siihen kuuluvia asiota. Jos ei enää keksi 10s sisään uutta, juo 3.",
     "Olet nyt kysymysmestari. Jos kysymykseesi vastaa, joutuu juomaan 3. Mestareita voi olla vain 1 kerrallaan.",
     "Tehkää sana kerrallaan tarina (pitkä virke), jossa jokainen sanoo vuorollaan yhden sanan. Se kehen tarina päättyy juo 3.",
     "Juot yhden, vasemmalla puolellasi juodaan 2, hänen vasemmalla 3, ..., viimeiseen pelaajaan asti",
@@ -57,7 +57,7 @@ export const normalQuestions = {
     "Pelaajat laittavat sormen yhden lasin/tölkin ympärille. Sano montako sormea jää: 'SORMIA. JÄÄ. numero', ja 'numerolla' pelaajat nostavat sormet. Jos arvaat väärin, juot.",
     "LATTIA ON LAAVAA. Jokainen joka osuu tällä hetkellä lattiaan juo.",
     "VESIPUTOUS",
-    "YLLÄTYSKYYKKY! ÄKKIÄ NYT!!!",*/
+    "YLLÄTYSKYYKKY! ÄKKIÄ NYT!!!",
     "Kaikki muut paitsi ruudussa oleva laittaa silmät kiinni ja näyttää yhdellä kädellä jonkun numeron (1-5). He, jotka valitsevat eniten tiettyä numeroa juovat."
   ]
 };
