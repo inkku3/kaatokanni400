@@ -22,8 +22,8 @@ function App() {
   const [currentVideoId, setCurrentVideoId] = useState(''); 
 
   const youtubeOptions = {
-    height: '300',
-    width: '480',
+    height: '210',
+    width: '370',
     playerVars: {
       playsinline: 1,
       rel: 0,
@@ -39,14 +39,30 @@ function App() {
     const ext = { never: [...teekkariQuestions.never, ...normalQuestions.never], tasks: [...teekkariQuestions.tasks, ...normalQuestions.tasks] };
     setAvailable(mode === "normaali" ? base : ext);
     setGameStarted(true);
-    setCurrent(`Pelissä esitetään "en ole koskaan" väitteitä. Jos väite ei ole kohdallasi totta, juot. Myös tehtäviä ja tapahtumia esiintyy.`);
+    setCurrent(`Pelissä esitetään mm. "en ole koskaan" väitteitä. Jos väite ei ole kohdallasi totta, juot.`);
   };
+
+  const getNextNormalQuestion= () => {
+    const isNever = Math.random() < 0.7;
+    const type = isNever ? "never" : "tasks";
+    let list = [...available[type]];
+    if (!list.length) {
+      refill(type);
+      return;
+    }
+    const idx = Math.floor(Math.random() * list.length);
+    const q = list.splice(idx, 1)[0];
+    setAvailable(prev => ({ ...prev, [type]: list }));
+    setCurrent(q);
+    setCurrentType(type);
+  }
+  
 
   const getNext = () => {
 
     if (showVideoPlayer){
         setShowVideoPlayer(false);
-        setCurrentVideoId('')
+        setCurrentVideoId("")
     }
 
     const blockingEventActive = timerActive || roundsTurns > 0;
@@ -54,7 +70,7 @@ function App() {
     if (Math.random() < 0.2 && !blockingEventActive) {
       const pool = mode === "teekkari" 
       ? specialEvents 
-      : specialEvents.filter(e => e.handler !== "timer" && e.handler !=="youtube");
+      : specialEvents.filter(e => e.handler !== "timer");
       if (!pool.length) {
         getNextNormalQuestion();
         return;
@@ -74,21 +90,7 @@ function App() {
         }
     }
   };
-  const getNextNormalQuestion= () => {
-    const isNever = Math.random() < 0.7;
-    const type = isNever ? "never" : "tasks";
-    let list = [...available[type]];
-    if (!list.length) {
-      refill(type);
-      return;
-    }
-    const idx = Math.floor(Math.random() * list.length);
-    const q = list.splice(idx, 1)[0];
-    setAvailable(prev => ({ ...prev, [type]: list }));
-    setCurrent(q);
-    setCurrentType(type);
-  }
-  
+
 
   const handleEvent = ev => {
     setCurrent(ev.text);
@@ -117,7 +119,7 @@ function App() {
   const refill = type => {
     const pool = mode === "normaali" ? [...normalQuestions[type]] : [...teekkariQuestions[type], ...normalQuestions[type]];
     setAvailable(prev => ({ ...prev, [type]: pool }));
-    setCurrent(`Kaikki ${type === 'never' ? 'En ole koskaan' : 'Tehtävät'} käytetty!`);
+    //setCurrent(`Kaikki ${type === 'never' ? 'En ole koskaan' : 'Tehtävät'} käytetty!`); ilmotus oli tosi tönkkö
     setCurrentType("");
   };
 
@@ -150,62 +152,66 @@ function App() {
         </div>
         <h2 className="text-xl mb-4 text-white">Miten pelataan?</h2>
         <div className="flex items-center justify-center mb-6r pb-5 gap-6">
-          <button className={`px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/90 text-white':'bg-gray-200'}`} onClick={() => setMode('normaali')}>Normaali</button>
-          <button className={`px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600 text-white':'bg-gray-200'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+          <button className={`px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600 hover:bg-rose-500/80 text-white':'bg-gray-200'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+          <button className={`px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/90 hover:bg-rose-500/80 text-white':'bg-gray-200'}`} onClick={() => setMode('normaali')}>Normaali</button>
         </div>
-        <button className="w-full py-2 bg-rose-600/80 text-white rounded-2xl" onClick={startGame}>Ei muuta ku juomaa</button>
+        <button className="w-full py-2 mt-4 bg-rose-600/80 text-white rounded-2xl hover:bg-rose-500/80" onClick={startGame}>Ei muuta ku juomaa</button>
+        <h3 className="text-white text-center mt-8"> Laitathan äänet kovalle mallasmaratonia varten.<p></p> "En ole koskaan" väitteet ovat kaikille pelaajille. <p></p></h3>
       </div>
     </div>
 
   );
 
-  return (
+return (
   <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black">
-  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] 
-  bg-cover bg-center blur-sm brightness-50 z-0"></div>  
+    <div className="absolute inset-0 bg-cover bg-center blur-sm brightness-50 z-0 bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
+    </div>
+    
     <div className="w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow-xl mb-32 z-10">
-        <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 text-shadow">
-          {current}
-        </h2>
-        {timerActive && (
-          <div className="text-2xl text-white font-bold text-center mb-6 p-3 bg-white/15 rounded-xl animate-pulse">
-            AIKA {formatTime(timeLeft)}
+      <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4">
+        {current}
+      </h2>
+      {timerActive && (
+        <div className="text-2xl text-white font-bold text-center mb-6 p-3 bg-white/15 rounded-xl animate-pulse">
+          AIKA {formatTime(timeLeft)}
+        </div>
+      )}
+    </div>
+    
+    {showVideoPlayer && (
+      <div className="w-full h-full absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-md z-10">
+        <div className="p-6 bg-pink-500/10 rounded-2xl shadow-2xl max-w-3xl w-full z-10">
+          <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 z-10">
+            {current}
+          </h2>
+          <div className="pl-0 md:pl-40 rounded-xl shadow-2xl overflow-hidden w-full">
+          <YouTube
+              videoId={currentVideoId}
+              opts={youtubeOptions}
+              onReady={onPlayerReady}
+            />
+          </div>
+        </div>
+      </div>
+    )}
+    
+    <div className="absolute bottom-24 w-full flex flex-col items-center">
+      <button 
+        className="w-64 font-sans font-bold text-xl px-6 py-4 mb-16 bg-rose-600/80 text-white rounded-2xl shadow-lg transform transition-transform hover:hover:bg-rose-500/80 z-10"
+        onClick={getNext}
+      > 
+        Seuraava 
+      </button>
+      
+      <div className="absolute inset-x-0 bottom-0 flex justify-center">
+        {roundsTurns > 0 && (
+          <div className="px-8 py-2 font-bold text-lg bg-rose-600/20 text-white rounded-2xl z-10">
+            {roundsName}: vuoroja jäljellä {roundsTurns}
           </div>
         )}
       </div>
-      
-      {showVideoPlayer && (
-        <div className="video-overlay w-full h-full absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-md z-10">
-          <div className="video-container p-6 bg-pink-500/10 rounded-2xl shadow-2xl max-w-3xl w-full z-10">
-            <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 z-10">
-              {current}
-            </h2>
-            <div className="rounded-xl overflow-hidden shadow-2xl">
-              <YouTube
-                videoId={currentVideoId}
-                opts={youtubeOptions}
-                onReady={onPlayerReady}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      
-      <div className="absolute bottom-20 w-full flex flex-col items-center">
-        <button className="
-        w-64 font-sans font-bold text-xl px-6 py-4 mb-8 bg-rose-600/80 text-white rounded-2xl shadow-lg transform transition-transform hover:shadow-xl z-10" 
-        onClick={getNext}> Seuraava </button>
-        
-        <div className="h-14 w-60 relative">
-          {roundsTurns > 0 && (
-            <div className="absolute px-8 py-4 font-bold text-lg bg-rose-600/20 text-white rounded-2xl z-10">
-              {roundsName}: vuoroja jäljellä {roundsTurns}
-            </div>
-          )}
-        </div>
-      </div>
     </div>
-  );
+  </div>
+);
 }
-
 export default App;
