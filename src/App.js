@@ -21,6 +21,10 @@ function App() {
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [currentVideoId, setCurrentVideoId] = useState(''); 
 
+  useEffect(() => {
+    document.title = "Kaatokänni400";
+  }, []);
+
   const youtubeOptions = {
     height: '210',
     width: '370',
@@ -142,7 +146,7 @@ function App() {
   if (!gameStarted) return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center blur-sm brightness-50 z-0"></div>  
-      <h1 className="text-2xl font-bold mb-6 text-white z-10">Kaatokänni 300 - tilana {mode}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-white z-10">Kaatokänni 400 - tilana {mode}</h1>
       <div className="bg-pink-500/10 p-6 rounded-lg shadow-md w-full max-w-md z-10">
         <h2 className="text-xl mb-4 text-white z-10">Montako pelaajaa?</h2>
         <div className="flex items-center justify-center mb-6 z-10">

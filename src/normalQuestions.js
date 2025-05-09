@@ -54,7 +54,6 @@ export const normalQuestions = {
     "Tiedän, kuka on Aija Puurtinen",
     "En ole koskaan omistanut Uggeja",
     "En ole koskaan fanittanut Hopeanuolta",
-    "En ole koskaan lukenut Neitsi Etsivä -kirjaa",
     "En osaa Petri Nygårdin biisiä ulkoa",
     "Tiesin, että Petri Nygård on asunut Toijalassa",
     "En ole koskaan käynyt Yyterissä",
