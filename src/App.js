@@ -47,7 +47,7 @@ function App() {
   };
 
   const getNextNormalQuestion= () => {
-    const isNever = Math.random() < 0.7;
+    const isNever = Math.random() < 0.6;
     const type = isNever ? "never" : "tasks";
     let list = [...available[type]];
     if (!list.length) {
@@ -71,7 +71,7 @@ function App() {
 
     const blockingEventActive = timerActive || roundsTurns > 0;
 
-    if (Math.random() < 0.2 && !blockingEventActive) {
+    if (Math.random() < 0.1 && !blockingEventActive) {
       const pool = mode === "teekkari" 
       ? specialEvents 
       : specialEvents.filter(e => e.handler !== "timer");
@@ -101,11 +101,11 @@ function App() {
     setCurrentType("special");
     switch (ev.handler) {
       case "rounds":
-        setRoundsTurns(playerCount);
+        setRoundsTurns(playerCount*ev.roundLength);
         setRoundsName(ev.roundsName);
         break;
       case "timer":
-        setTimeLeft(7 * 60);
+        setTimeLeft(ev.minutes * 60);
         setTimerActive(true);
         timerRef.current = setInterval(() => setTimeLeft(prev => prev <= 1 ? (clearInterval(timerRef.current), clearInterval(beepRef.current), setTimerActive(false), 0) : prev - 1), 1000);
         beepRef.current = setInterval(playBeep, 60000);

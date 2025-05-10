@@ -51,7 +51,6 @@ export const teekkariQuestions = {
     "En ole koskaan käynyt Konetalon EXAM-luokassa"
   ],
   tasks: [
-    "Valitse huora. Huorasi juo aina, kun itse juot. Huoria voi ketjuttaa.",
     "Se, joka kertoo ekana järjestysluvun kalsiumille saa antaa 3 hörppyä.",
     "Flirttaile kuin average teekkari",
     "Selitä Newtonin 3. laki. Jos et osaa, shotti.",
