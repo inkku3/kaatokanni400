@@ -44,7 +44,6 @@ export const teekkariQuestions = {
     "En ole liikkunut kampuksella alasti..",
     "En ole koskaan juonut Coop Lager",
     "En ole koskaan juonut K menu olutta",
-    "En ole koskaan käynyt treffeillä teekkarin kanssa",
     "En ole koskaan joutunut selittämään, mikä on teekkari",
     "En ole koskaan päässyt tenttiä vasta 3. kerralla läpi.",
     "En ole koskaan opiskellut aiempaa tutkintoa",
@@ -58,7 +57,10 @@ export const teekkariQuestions = {
     "Fuksipisteesi jaettuna 100 = montako annat",
     "Keskiarvo sisussa = montako juot",
     "Viimeisin kurssiarvosanasi = montako annat",
-    "Jos ole et päässyt läpi pakollisesta kurssista, otat shotin",
+    "Jos et ole päässyt läpi pakollisesta kurssista, otat shotin",
     "Kuka ravaa uusintatenteissä? Hänelle shotti."
-  ]
+  ],
+  spicy: [
+    "En ole koskaan käynyt treffeillä teekkarin kanssa"
+  ],
 };

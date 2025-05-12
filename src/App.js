@@ -8,7 +8,8 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
   const [mode, setMode] = useState("normaali");
-  const [available, setAvailable] = useState({ never: [], tasks: [] });
+  const [spicyMode, setSpicy] = useState(true);
+  const [available, setAvailable] = useState({ never: [], tasks: [], spicy: [] });
   const [current, setCurrent] = useState("JUOMAPELI");
   const [currentType, setCurrentType] = useState("");
   const [roundsTurns, setRoundsTurns] = useState(0);
@@ -39,16 +40,60 @@ function App() {
   };
 
   const startGame = () => {
-    const base = { never: [...normalQuestions.never], tasks: [...normalQuestions.tasks] };
-    const ext = { never: [...teekkariQuestions.never, ...normalQuestions.never], tasks: [...teekkariQuestions.tasks, ...normalQuestions.tasks] };
-    setAvailable(mode === "normaali" ? base : ext);
+
+    const normalPool = { never: [...normalQuestions.never],
+                        tasks: [...normalQuestions.tasks],
+                        spicy: [...normalQuestions.spicy]
+    };
+    const teekkariPool = { never: [...teekkariQuestions.never],
+      tasks: [...teekkariQuestions.tasks],
+      spicy: [...teekkariQuestions.spicy]
+    };
+
+    let initAvailable = {
+      never: [],
+      tasks: [],
+      spicy: []
+    };
+
+    if (mode === "teekkari"){
+        initAvailable.never = [...teekkariPool.never, ...normalPool.never];
+        initAvailable.tasks = [...teekkariPool.tasks, ...normalPool.tasks];
+    } else if (mode ==="normaali"){
+        initAvailable.never = normalPool.never;
+        initAvailable.tasks = normalPool.tasks;
+    }
+
+    if (spicyMode){
+      if (mode === "teekkari"){
+        initAvailable.spicy = [...teekkariPool.spicy, ...normalPool.spicy];
+      }
+      else if (mode === "normaali"){
+        initAvailable.spicy = normalPool.spicy;
+      }
+    }
+
+    setAvailable(initAvailable);
+
     setGameStarted(true);
     setCurrent(`Pelissä esitetään mm. "en ole koskaan" väitteitä. Jos väite ei ole kohdallasi totta, juot.`);
   };
 
   const getNextNormalQuestion= () => {
-    const isNever = Math.random() < 0.6;
-    const type = isNever ? "never" : "tasks";
+    let type;
+    const chance = Math.random();
+
+    if (spicyMode) {
+      const chance = Math.random();
+      if (chance < 0.2) {
+        type = "spicy";
+      } else {
+        type = Math.random() < 0.5 ? "never" : "tasks";
+      }
+    } else {
+      type = Math.random() < 0.5 ? "never" : "tasks";
+    }
+
     let list = [...available[type]];
     if (!list.length) {
       refill(type);
@@ -121,9 +166,24 @@ function App() {
   };
 
   const refill = type => {
-    const pool = mode === "normaali" ? [...normalQuestions[type]] : [...teekkariQuestions[type], ...normalQuestions[type]];
+    let pool = [];
+    const normalSource = normalQuestions[type];
+    const teekkariSource = teekkariQuestions[type];
+
+    if (type === 'never' || type === 'tasks'){
+      pool = [...normalSource];
+      if (mode === 'teekkari'){
+        pool.push(...teekkariSource);
+      }
+    }
+    else if (type === 'spicy'){
+      pool = normalQuestions.spicy;
+      if (mode === 'teekkari'){
+        pool.push(...teekkariQuestions.spicy)
+      }
+    }
+
     setAvailable(prev => ({ ...prev, [type]: pool }));
-    //setCurrent(`Kaikki ${type === 'never' ? 'En ole koskaan' : 'Tehtävät'} käytetty!`); ilmotus oli tosi tönkkö
     setCurrentType("");
   };
 
@@ -136,7 +196,7 @@ function App() {
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start();
-    setTimeout(() => osc.stop(), 600);
+    setTimeout(() => osc.stop(), 900);
   };
 
   const formatTime = secs => `${Math.floor(secs / 60)}:${secs % 60 < 10 ? '0' : ''}${secs % 60}`;
@@ -146,20 +206,27 @@ function App() {
   if (!gameStarted) return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center blur-sm brightness-50 z-0"></div>  
-      <h1 className="text-2xl font-bold mb-6 text-white z-10">Kaatokänni 400 - tilana {mode}</h1>
+      <h1 className="transition-all duration-400 text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4">Kaatokänni 400</h1>
+
       <div className="bg-pink-500/10 p-6 rounded-lg shadow-md w-full max-w-md z-10">
         <h2 className="text-xl mb-4 text-white z-10">Montako pelaajaa?</h2>
         <div className="flex items-center justify-center mb-6 z-10">
-          <button className="px-3 py-1 bg-rose-200 rounded-l z-10" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
+          <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
           <span className="px-4 py-1 bg-gray-200 z-10">{playerCount}</span>
-          <button className="px-3 py-1 bg-rose-200 rounded-r z-10" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
+          <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
         </div>
         <h2 className="text-xl mb-4 text-white">Miten pelataan?</h2>
         <div className="flex items-center justify-center mb-6r pb-5 gap-6">
-          <button className={`px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600 hover:bg-rose-500/80 text-white':'bg-gray-200'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
-          <button className={`px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/90 hover:bg-rose-500/80 text-white':'bg-gray-200'}`} onClick={() => setMode('normaali')}>Normaali</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
         </div>
-        <button className="w-full py-2 mt-4 bg-rose-600/80 text-white rounded-2xl hover:bg-rose-500/80" onClick={startGame}>Ei muuta ku juomaa</button>
+
+      <div className="flex items-center justify-between px-4 py-2">
+        <h3 className="text-white">Lisätäänkö 'spicy' kysymyksiä?</h3>
+        <button className={`transition-all duration-300 rounded-lg px-3 py-3 border-2 border-rose-600${spicyMode ? 'text-white bg-rose-500 border-2': ''}`} onClick={() => setSpicy(prev => !prev)}></button>
+      </div>
+
+        <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa</button>
         <h3 className="text-white text-center mt-8"> Laitathan äänet kovalle mallasmaratonia varten.<p></p> "En ole koskaan" väitteet ovat kaikille pelaajille. <p></p></h3>
       </div>
     </div>
