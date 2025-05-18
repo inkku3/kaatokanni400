@@ -76,22 +76,35 @@ function App() {
     setAvailable(initAvailable);
 
     setGameStarted(true);
-    setCurrent(`Pelissä esitetään mm. "en ole koskaan" väitteitä. Jos väite ei ole kohdallasi totta, juot.`);
+    setCurrent(<div>
+    INFO: 
+    <ul className="text-m font-medium list-disc ml-5 leading-8 mt-2 text-xl text-left">
+      <li>'en ole koskaan' = kaikki, jotka ovat tehneet asian juovat.</li>
+      <li>vuorollaan pelaaja painaa seuraava -nappia.</li>
+      <li>laitathan äänet täysille mallasmaratonia varten.</li>
+      <li>erikoistapahtumat koskevat kaikkia</li>
+    </ul>
+  </div>);
+  };
+
+  const getRandom=(max) =>{
+    const array = new Uint32Array(1);
+    self.crypto.getRandomValues(array);
+
+      return array[0] / (0xffffffff + 1) * max;
   };
 
   const getNextNormalQuestion= () => {
     let type;
-    const chance = Math.random();
-
     if (spicyMode) {
-      const chance = Math.random();
+      const chance = getRandom(1);
       if (chance < 0.2) {
         type = "spicy";
       } else {
-        type = Math.random() < 0.5 ? "never" : "tasks";
+        type = getRandom(1) < 0.6 ? "never" : "tasks";
       }
     } else {
-      type = Math.random() < 0.5 ? "never" : "tasks";
+      type = getRandom(1) < 0.6 ? "never" : "tasks";
     }
 
     let list = [...available[type]];
@@ -99,7 +112,7 @@ function App() {
       refill(type);
       return;
     }
-    const idx = Math.floor(Math.random() * list.length);
+    const idx = Math.floor(getRandom(list.length));
     const q = list.splice(idx, 1)[0];
     setAvailable(prev => ({ ...prev, [type]: list }));
     setCurrent(q);
@@ -188,11 +201,11 @@ function App() {
   };
 
   const playBeep = () => {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = new (window.AudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.frequency.value = 800;
-    gain.gain.value = 0.3;
+    gain.gain.value = 0.5;
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start();
@@ -216,18 +229,18 @@ function App() {
           <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
         </div>
         <h2 className="text-xl mb-4 text-white">Miten pelataan?</h2>
-        <div className="flex items-center justify-center mb-6r pb-5 gap-6">
-          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+        <div className="flex items-center justify-center mb-6 pb-5 gap-6">
           <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
         </div>
 
       <div className="flex items-center justify-between px-4 py-2">
         <h3 className="text-white">Lisätäänkö 'spicy' kysymyksiä?</h3>
-        <button className={`transition-all duration-300 rounded-lg px-3 py-3 border-2 border-rose-600${spicyMode ? 'text-white bg-rose-500 border-2': ''}`} onClick={() => setSpicy(prev => !prev)}></button>
+        <button className={`transition-all duration-200 rounded-lg px-2 bg-black border-2 border-rose-500 ${spicyMode ? 'text-white border-2 border-rose-800': ''}`} onClick={() => setSpicy(prev => !prev)}>x</button>
       </div>
 
         <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa</button>
-        <h3 className="text-white text-center mt-8"> Laitathan äänet kovalle mallasmaratonia varten.<p></p> "En ole koskaan" väitteet ovat kaikille pelaajille. <p></p></h3>
+        <h3 className="text-white text-center text-sm mt-8">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
       </div>
     </div>
 

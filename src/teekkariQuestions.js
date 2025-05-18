@@ -40,7 +40,7 @@ export const teekkariQuestions = {
     "En ole koskaan ommellut haalarimerkkiä ompelukoneella",
     "En ole koskaan antanut toisen ihmisen ommella merkkejä haalariini puolestani",
     "Haalarini hihat eivät ole koskaan koskeneet vessan lattiaa",
-    "Ei ole kiltahuonetta, jonka sijaintia en tiedä",
+    "Tiedän jokaisen kiltahuoneen sijainnin",
     "En ole liikkunut kampuksella alasti..",
     "En ole koskaan juonut Coop Lager",
     "En ole koskaan juonut K menu olutta",
