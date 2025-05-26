@@ -2,7 +2,7 @@
   "name": "kaatis400",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/portfolio/kaatokanni400",
+  "homepage": "/projects/kaatokanni400",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
