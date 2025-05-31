@@ -45,7 +45,7 @@ export const normalQuestions = {
     "En ole koskaan tiennyt, kuka on Aija Puurtinen",
     "En ole koskaan omistanut Uggeja",
     "En ole koskaan fanittanut Hopeanuolta",
-    "En ole koskaan osannut Petri Nygårdin biisiä ulkoa,
+    "En ole koskaan osannut Petri Nygårdin biisiä ulkoa",
     "En ole koskaan käynyt Yyterissä",
     "En ole koskaan käynyt Kalajoen hiekkasärkillä",
     "En ole koskaan käynyt Lapin maakunnassa",
