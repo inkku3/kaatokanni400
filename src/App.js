@@ -33,7 +33,7 @@ function App() {
       setDarkMode(true)
       localStorage.setItem("displayMode", newMode)
     }
-    setDarkMode(savedMode  === 'light' ? false : true)
+    setDarkMode(savedMode  === 'dark' ? false : true)
 
     document.title = "Kaatokänni400";
   }, []);
