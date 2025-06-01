@@ -19,6 +19,7 @@ function App() {
   const [timerActive, setTimerActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [eventCooldown, setEventCooldown] = useState(3);
+  const [darkMode, setDarkMode] = useState(true);
   const timerRef = useRef(null);
   const beepRef = useRef(null);
 
@@ -26,6 +27,14 @@ function App() {
   const [currentVideoId, setCurrentVideoId] = useState(''); 
 
   useEffect(() => {
+    let savedMode = localStorage.getItem("displayMode")
+    if (!savedMode) {
+      const newMode = "dark"
+      setDarkMode(true)
+      localStorage.setItem("displayMode", newMode)
+    }
+    setDarkMode(savedMode  === 'light' ? false : true)
+
     document.title = "Kaatokänni400";
   }, []);
 
@@ -227,71 +236,81 @@ function App() {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   }
+  const toggleDisplayMode = () => {
+    setDarkMode(!darkMode);
+  }
 
   const formatTime = secs => `${Math.floor(secs / 60)}:${secs % 60 < 10 ? '0' : ''}${secs % 60}`;
 
   useEffect(() => () => { clearInterval(timerRef.current); clearInterval(beepRef.current); }, []);
 
   if (!gameStarted) return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center blur-sm brightness-50 z-0"></div>  
-      <h1 className="transition-all duration-400 text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4">Kaatokänni 400</h1>
+    <div className={`${darkMode ? "dark" : ""}`}>
+  <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black dark:bg-white">
+      <div className="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-20 z-0"></div>  
+      <h1 className="text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4 dark:text-rose-950">Kaatokänni 400</h1>
 
-      <div className="bg-pink-500/10 p-6 rounded-lg shadow-md w-full max-w-md z-10">
-        <h2 className="text-xl mb-4 text-white z-10">Montako pelaajaa?</h2>
+      <div className="bg-pink-500/10 p-6 rounded-lg w-full max-w-md z-10 dark:bg-rose-50/70">
+        <h2 className="text-xl mb-4 text-white z-10 dark:text-black">Montako pelaajaa?</h2>
         <div className="flex items-center justify-center mb-6 z-10">
           <button className="transition-opacity duration-200 px-3 py-1 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
           <span className="px-4 py-1 bg-gray-200 z-10">{playerCount}</span>
           <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
         </div>
-        <h2 className="text-xl mb-4 text-white">Miten pelataan?</h2>
+        <h2 className="text-xl mb-4 text-white dark:text-black">Miten pelataan?</h2>
         <div className="flex items-center justify-center mb-6 pb-5 gap-6">
-          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
-          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
         </div>
 
-      <div className="flex items-center justify-between px-4 py-2">
-        <h3 className="text-white">Lisätäänkö 'spicy' kysymyksiä?</h3>
-        <button className={`transition-all duration-200 rounded-lg px-2 bg-black border-2 border-rose-500 ${spicyMode ? 'text-white border-2 border-rose-500': 'border-rose-800'}`} onClick={() => setSpicy(prev => !prev)}>x</button>
+      <div className="flex items-center justify-between py-2">
+        <h3 className="text-white dark:text-black">Lisätäänkö 'spicy' kysymyksiä?</h3>
+        <button className={`transition-all duration-200 rounded-lg px-2 bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${spicyMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setSpicy(prev => !prev)}>x</button>
       </div>
 
         <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa</button>
-        <h3 className="text-white text-center text-sm mt-8">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
+        <h3 className="text-white text-center text-sm mt-8 dark:text-black">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
+        <div className="flex items-center justify-between mt-6">
+          <h2 className="text-white dark:text-black">Pelin teema:</h2>
+          <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
+      </div>        
       </div>
     </div>
-
+    </div>
   );
 
 return (
-  <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black">
+      <div className={`${darkMode ? "dark" : ""}`}>
+
+  <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black dark:bg-white">
     
-    <div className="absolute inset-0 bg-cover bg-center blur-sm brightness-50 z-0 bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
-    </div>
+      <div className="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
+
     
-     <button className="transition-all duration-800 absolute top-16 right-12 flex flex-col gap-1.5 hover:opacity-80" onClick={toggleMenu}> 
-           <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
-           <span className={`transition all duration-200 block bg-white w-10 h-1 rounded-xl ${menuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-           <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl ${menuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
+     <button className="transition-all duration-800 absolute top-16 right-12 flex flex-col gap-1.5 hover:opacity-80 dark:border-rose-800" onClick={toggleMenu}> 
+           <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
+           <span className={`transition all duration-200 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+           <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
       </button>
-    <h2 className="transition-all duration-800 absolute top-14 left-12 text-white text-2xl text-white font-bold leading-relaxed">Pelaaja: {playerNumber}</h2>
-    <div className="w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow-xl mb-32 z-10">
-      <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4">
+    <h2 className="transition-all duration-800 absolute top-14 left-12 text-white text-2xl text-white font-bold leading-relaxed dark:text-rose-900">Pelaaja: {playerNumber}</h2>
+    <div className="w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow mb-32 z-10 dark:bg-rose-400/10">
+      <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 dark:text-black">
         {current}
       </h2>
       {timerActive && (
-        <div className="text-2xl text-white font-bold text-center mb-6 p-3 bg-white/15 rounded-xl animate-pulse">
+        <div className="text-2xl text-white font-bold text-center mb-6 p-3 bg-white/15 rounded-xl animate-pulse dark:text-black">
           AIKA {formatTime(timeLeft)}
         </div>
       )}
     </div>
 
     {showVideoPlayer && (
-      <div className="w-full h-full absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-md z-10">
-        <div className="p-6 bg-pink-500/10 rounded-2xl shadow-2xl max-w-3xl w-full z-10">
-          <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 z-10">
+      <div className="w-full h-full absolute -inset-y-8 flex items-center justify-center bg-black/20 backdrop-blur-md z-10">
+        <div className="p-6 bg-pink-500/10 rounded-2xl shadow max-w-3xl w-full z-10">
+          <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 z-10 dark:text-black">
             {current}
           </h2>
-          <div className="pl-0 md:pl-40 rounded-xl shadow-2xl overflow-hidden w-full">
+          <div className="pl-0 md:pl-40 rounded-xl overflow-hidden w-full">
           <YouTube
               videoId={currentVideoId}
               opts={youtubeOptions}
@@ -304,7 +323,7 @@ return (
     
     <div className="absolute bottom-24 w-full flex flex-col items-center">
       <button 
-        className="w-64 font-sans font-bold text-xl px-6 py-4 mb-16 bg-rose-600/80 text-white rounded-2xl shadow-lg transform transition-transform hover:hover:bg-rose-500/80 z-10"
+        className="w-64 font-sans font-bold text-xl px-6 py-4 mb-16 bg-rose-600/80 text-white rounded-2xl shadow-lg transform transition-transform hover:hover:bg-rose-500/80 z-10 dark:bg-rose-600 dark:hover:bg-rose-600/80"
         onClick={getNext}
       > 
         Seuraava 
@@ -312,18 +331,18 @@ return (
       
       <div className="absolute inset-x-0 bottom-0 flex justify-center">
         {roundsTurns > 0 && (
-          <div className="px-8 py-2 font-bold text-lg bg-rose-600/20 text-white rounded-2xl z-10">
+          <div className="px-8 py-2 font-bold text-lg bg-rose-600/20 text-white rounded-2xl z-10 dark:bg-rose-500/50">
             {roundsName}: vuoroja jäljellä {roundsTurns}
           </div>
         )}
       </div>
     </div>
   {menuOpen && (
-      <div className="transition-all duration-800 w-full max-w-2xl h-[70%] top-30 absolute bg-black/80 z-10 rounded-xl backdrop-blur-md shadow-2xl">
+      <div className="transition-all duration-800 w-full max-w-2xl h-[70%] top-30 absolute bg-black/80 z-10 rounded-xl backdrop-blur-md shadow-2xl dark:bg-pink-950/40">
       
       <h1 className="transition-all duration-400 text-center w-full text-wrap break-words text-3xl font-bold mt-10 text-white z-10">Asetukset</h1>
       <div className="w-full flex items-center justify-between py-10">
-      <h2 className="text-xl text-white z-10 mx-8">Muuta pelaajien määrää:</h2>
+      <h2 className="text-xl text-white z-10 mx-8 ">Muuta pelaajien määrää:</h2>
         <div className="flex mr-10 z-10 float-right">
           <button className="transition-opacity duration-200 px-3 py-2 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
           <span className="px-5 py-2 bg-gray-200 z-10">{playerCount}</span>
@@ -338,14 +357,19 @@ return (
        </div></div>
     <div className="flex items-center mx-8 justify-between">
         <h3 className="text-white text-xl">'Spicy' kysymyksiä?</h3>
-        <button className={`transition-all duration-200 rounded-lg px-4 py-2 bg-black border-2 border-rose-500 ${spicyMode ? 'text-white font-bold border-2 ': 'text-black font-bold border-rose-800'}`} onClick={() => setSpicy(prev => !prev)}>X</button>
+        <button className={`transition-all duration-200 rounded-lg px-4 py-1.5 text-xl bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${spicyMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setSpicy(prev => !prev)}>x</button>
       </div>
-        <div className="flex items-center mx-10 justify-between">
-        <h4 className="text-white text-s bottom-10 absolute">Kaatokänni400 ylläpitäjä: @inkku2 (discord).</h4>
+        <div className="flex items-center mx-8 justify-between">
+          <h2 className="text-xl mt-12 text text-white">Pelin teema</h2>
+          <button className={`transition-all mt-12 duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
       </div>
+
+
+
+        <h4 className="text-white text-s bottom-10 absolute mx-8">Kaatokänni400 ylläpitäjä: @inkku2 (discord).</h4>
       </div>
     )}
-  </div>
+  </div> </div>
   
 );
 }
