@@ -22,7 +22,7 @@ export const teekkariQuestions = {
     "En ole koskaan nukahtanu kiltaan / kerhohuoneelle",
     "En ole koskaan käynyt Skellarissa",
     "En ole koskaan kuullut skellari verseä",
-    "En ole käynyt toisessa kaupungissa opiskelijatapahtumassa",
+    "En ole koskaan käynyt toisessa kaupungissa opiskelijatapahtumassa",
     "En ole koskaan käynyt tut/tetapk luennolla",
     "En ole koskaan nukkunut luennolla",
     "En ole koskaan oksentanut kampuksella",
@@ -41,8 +41,8 @@ export const teekkariQuestions = {
     "En ole koskaan koodannut Pythonilla",
     "En ole koskaan saanut matikan kurssista yli 3",
     "En ole koskaan ommellut haalarimerkkiä ompelukoneella",
-    "En ole koskaan antanut toisen ihmisen ommella merkkejä haalariini puolestani",
-    "Haalarini hihat eivät ole koskaan koskeneet vessan lattiaa",
+    "En ole koskaan antanut toisen ihmisen ommella merkkiä haalareihini puolestani",
+    "En ole koskaan antanut haalarieni hihojen koskea baarin vessan lattiaa",
     "En ole koskaan liikkunut kampuksella alasti..",
     "En ole koskaan juonut Coop Lager",
     "En ole koskaan juonut K menu olutta",
@@ -62,9 +62,18 @@ export const teekkariQuestions = {
     "Keskiarvo sisussa = montako juot",
     "Viimeisin kurssiarvosanasi = montako annat",
     "Jos et ole päässyt läpi pakollisesta kurssista, otat shotin",
-    "Kuka ravaa uusintatenteissä? Hänelle shotti."
+    "Kuka ravaa uusintatenteissä? Hänelle shotti.",
+    "Olisitko halunnut opiskelemaan jotain muuta?",
+    "Rehellisesti, pidätkö killastasi?",
+    "Tee lakillasi helikopteri. Jos ei ole hattusesonki, pakko juoda...",
+    "Onko suvussasi teekkareita? Juo, jos on.",
+    "Juo 1 per jokainen teekkarikaverisi",
+    "Juo 1 per jokainen humanistikaverisi"
   ],
   spicy: [
-    "En ole koskaan käynyt treffeillä teekkarin kanssa"
+    "En ole koskaan käynyt treffeillä teekkarin kanssa",
+    "En ole koskaan harrastanut seksiä teekkarin kanssa",
+    "En ole koskaan suudellut kampuksella",
+    "En ole koskaan ihastunut teekkariin"
   ],
 };

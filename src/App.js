@@ -52,8 +52,8 @@ function App() {
   }, []);
 
   const youtubeOptions = {
-    height: '210',
-    width: '370',
+    height: '192',
+    width: '340',
     playerVars: {
       playsinline: 1,
       rel: 0,
@@ -263,7 +263,7 @@ function App() {
   if (!gameStarted) return (
     <div className={`${darkMode ? "dark" : ""}`}>
   <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black dark:bg-white">
-      <div className="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-20 z-0"></div>  
+      <div className="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
       <h1 className="text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4 dark:text-rose-950">Kaatokänni 400</h1>
 
       <div className="bg-pink-500/10 p-6 rounded-lg w-full max-w-md z-10 dark:bg-rose-50/70 relative">
@@ -275,16 +275,16 @@ function App() {
         </div>
         <div className="flex justify-between mb-4">
         <h2 className="text-xl text-white dark:text-black">Miten pelataan?</h2>
-        <button className={`text-white z-20 font-bold text-xs ${infoOpen===true? 'hover:animate-pulse mr-2':'border rounded-3xl px-3 text-white'}`} ref={menuRef} onClick={toggleInfo}>{infoOpen ? "X" : "i"}</button>
+        <button className={`text-white z-20 font-bold text-xs dark:text-black dark:border-pink-800 ${infoOpen===true? 'hover:animate-pulse mr-2 dark:text-white':'border rounded-3xl px-3 text-white'}`} ref={menuRef} onClick={toggleInfo}>{infoOpen ? "X" : "i"}</button>
         </div>
         <div className="flex items-center justify-center mb-6 pb-5 gap-6">
           <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
           <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
         </div>
             {infoOpen && (
-              <div className="absolute right-[0.8rem] top-[7.3rem] z-10 w-[15rem] rounded-xl bg-black/90 p-5 pr-10 text-sm text-white">
+              <div className="absolute right-[0.8rem] top-[7.3rem] z-10 w-[15rem] rounded-xl bg-black/90 p-5 pr-10 text-sm text-white dark:bg-pink-950/55 backdrop-blur-xl">
                 <p className="leading-relaxed">
-                  Teekkari-tilassa esiintyy lisänä Hervannan kampukseen sekä luonnontieteisiin liittyvää sisältöä. Muita eroja ei ole.
+                  Teekkari-tilassa esiintyy lisäksi Hervannan kampukseen, teekkareihin, sekä luonnontieteisiin liittyvää sisältöä.
                 </p>
               </div>
             )}
@@ -335,7 +335,7 @@ return (
           <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 z-10 dark:text-black">
             {current}
           </h2>
-          <div className="pl-0 md:pl-40 rounded-xl overflow-hidden w-full">
+          <div className="pl-0 md:pl-40 rounded-l overflow-hidden w-full">
           <YouTube
               videoId={currentVideoId}
               opts={youtubeOptions}

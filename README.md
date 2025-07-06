@@ -1,10 +1,10 @@
 Kaatokänni 400
 
-Built with
+made with
 
-react-scripts
-react-youtube
-Tailwind CSS 
+-react-scripts
+-react-youtube
+-Tailwind CSS 
 
 All rights are reserved. This software is provided solely for viewing on the official website where it is published by the copyright holder. Software may not be reproduced, or distributed without written permission. It is intended solely for viewing and playing on the official published site, at inkku.xyz.
 
