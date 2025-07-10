@@ -83,7 +83,9 @@ export const normalQuestions = {
     "En ole koskaan ajanut ilman turvavyötä",
     "Kaikki, joiden nimi alkaa vokaalilla, juo.",
     "Jos olet joskus seurustellut vain viikkoja, juo.",
-    "Kaikki, joilla on ollut punaiset hiukset jossain vaiheessa elämää, juo."
+    "Kaikki, joilla on ollut punaiset hiukset jossain vaiheessa elämää, juo.",
+    "Jokainen kertoo allergiansa, ja juo 1 per allergia.",
+    "Kuka on eniten landelta? Hän juo."
 
   ],
   tasks: [

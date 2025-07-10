@@ -14,7 +14,6 @@ function App() {
   const [spicyMode, setSpicy] = useState(true);
   const [available, setAvailable] = useState({ never: [], tasks: [], spicy: [] });
   const [current, setCurrent] = useState("JUOMAPELI");
-  const [currentType, setCurrentType] = useState("");
   const [roundsTurns, setRoundsTurns] = useState(0);
   const [roundsName, setRoundsName] = useState("");
   const [timerActive, setTimerActive] = useState(false);
@@ -23,7 +22,6 @@ function App() {
   const [darkMode, setDarkMode] = useState(true);
   const timerRef = useRef(null);
   const beepRef = useRef(null);
-
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [currentVideoId, setCurrentVideoId] = useState(''); 
 
@@ -105,7 +103,6 @@ function App() {
     INFO: 
     <ul className="text-m font-medium list-disc ml-5 leading-8 mt-2 text-xl text-left">
       <li>"En ole koskaan" = kaikki, jotka ovat tehneet asian, juovat.</li>
-      <li>Vuorossa olevan pelaajan numero näkyy vasemmassa yläkulmassa.</li>
       <li>Laitathan äänet täysille mallasmaratonia varten.</li>
       <li>Erikoistapahtumat koskevat kaikkia.</li>
     </ul>
@@ -200,7 +197,8 @@ function App() {
       case "timer":
         setTimeLeft(ev.minutes * 60);
         setTimerActive(true);
-        timerRef.current = setInterval(() => setTimeLeft(prev => prev <= 1 ? (clearInterval(timerRef.current), clearInterval(beepRef.current), setTimerActive(false), 0) : prev - 1), 1000);
+        timerRef.current = setInterval(() => setTimeLeft(prev => prev <= 1 ? (clearInterval(timerRef.current),
+        clearInterval(beepRef.current), setTimerActive(false), 0) : prev - 1), 1000);
         beepRef.current = setInterval(playBeep, 60000);
         playBeep();
         break;
@@ -296,7 +294,7 @@ function App() {
         <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa</button>
         <h3 className="text-white text-center text-sm mt-8 dark:text-black">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
         <div className="flex items-center justify-between mt-6">
-          <h2 className="text-white dark:text-black">Pelin teema:</h2>
+          <h2 className="text-white dark:text-black">Pelin ulkonäkö:</h2>
           <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
       </div>        
       </div>
