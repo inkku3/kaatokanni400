@@ -6,6 +6,7 @@ import { normalQuestions } from "./normalQuestions";
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
+  const [currentType, setCurrentType] = useState("");
   const [menuOpen, setMenuOpen] =useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
