@@ -44,7 +44,7 @@ export const teekkariQuestions = {
     "En ole koskaan antanut toisen ihmisen ommella merkkiä haalareihini puolestani",
     "En ole koskaan antanut haalarieni hihojen koskea baarin vessan lattiaa",
     "En ole koskaan liikkunut kampuksella alasti..",
-    "En ole koskaan juonut Coop Lager",
+    "En ole koskaan juonut Coop Lager olutta",
     "En ole koskaan juonut K menu olutta",
     "En ole koskaan joutunut selittämään, mikä on teekkari",
     "En ole koskaan huoltanut lakkini tupsua",
