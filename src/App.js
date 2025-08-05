@@ -117,7 +117,7 @@ function App() {
       return array[0] / (0xffffffff + 1) * max;
   };
 
-  const getNextNormalQuestion= () => {
+  const getNextQuestion= () => {
     let type;
     if (spicyMode) {
       const chance = getRandom(1);
@@ -132,15 +132,33 @@ function App() {
 
     let list = [...available[type]];
     if (!list.length) {
-      refill(type);
-      return;
+        let pool = [];
+        const normalSource = normalQuestions[type];
+        const teekkariSource = teekkariQuestions[type];
+
+        if (type === 'never' || type === 'tasks'){
+          pool = [...normalSource];
+          if (mode === 'teekkari'){
+            pool.push(...teekkariSource);
+          }
+        }
+        else if (type === 'spicy'){
+          pool = [...normalQuestions.spicy];
+          if (mode === 'teekkari'){
+            pool.push(...teekkariQuestions.spicy)
+          }
+        }
+
+        setAvailable(prev => ({ ...prev, [type]: pool }));
+        list = [...pool];
     }
+
     const idx = Math.floor(getRandom(list.length));
     const q = list.splice(idx, 1)[0];
     setAvailable(prev => ({ ...prev, [type]: list }));
     setCurrent(q);
     setCurrentType(type);
-  }
+  };
   
 
   const getNext = () => {
@@ -167,14 +185,14 @@ function App() {
       ? specialEvents 
       : specialEvents.filter(e => e.handler !== "timer");
       if (!pool.length) {
-        getNextNormalQuestion();
+        getNextQuestion();
         return;
       }
-      setEventCooldown(playerCount+4)
+      setEventCooldown(playerCount%2)
       const ev = pool[Math.floor(Math.random() * pool.length)];
       handleEvent(ev);
     } else {
-        getNextNormalQuestion();
+        getNextQuestion();
     }
     if (roundsTurns > 0) {
         const newRoundsTurns = roundsTurns-1;
@@ -211,27 +229,29 @@ function App() {
         break;
     }
   };
+  
+  const modeSwitch = (newMode) => {
+    setMode(newMode);
+    setAvailable(prevAv => {
+      const updateAv = {...prevAv };
 
-  const refill = type => {
-    let pool = [];
-    const normalSource = normalQuestions[type];
-    const teekkariSource = teekkariQuestions[type];
+      for (const type of Object.keys(prevAv)) {
+        const currentQ = prevAv[type];
+        const teekkariQ = teekkariQuestions[type];
 
-    if (type === 'never' || type === 'tasks'){
-      pool = [...normalSource];
-      if (mode === 'teekkari'){
-        pool.push(...teekkariSource);
+        if (newMode === 'teekkari'){
+          updateAv[type] = [...currentQ, ...teekkariQ];
+        }
+        else {
+            const filtered = currentQ.filter(
+              prompt => !teekkariQ.some(qq => qq.text === prompt.text)
+            );
+            updateAv[type] = filtered;
+        }
       }
-    }
-    else if (type === 'spicy'){
-      pool = normalQuestions.spicy;
-      if (mode === 'teekkari'){
-        pool.push(...teekkariQuestions.spicy)
-      }
-    }
-
-    setAvailable(prev => ({ ...prev, [type]: pool }));
-    setCurrentType("");
+    console.log('Mode swap succesful:', updateAv);
+    return updateAv;
+    });
   };
 
   const playBeep = () => {
@@ -266,10 +286,10 @@ function App() {
       <h1 className="text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4 dark:text-rose-950">Kaatokänni 400</h1>
 
       <div className="bg-pink-500/10 p-6 rounded-lg w-full max-w-md z-10 dark:bg-rose-50/70 relative">
-        <h2 className="text-xl mb-4 text-white z-10 dark:text-black">Montako pelaajaa?</h2>
+        <h2 className="text-xl mb-4 p-2 text-white z-10 dark:text-black">Montako pelaajaa?</h2>
         <div className="flex items-center justify-center mb-6 z-10">
           <button className="transition-opacity duration-200 px-3 py-1 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
-          <span className="px-4 py-1 bg-gray-200 z-10">{playerCount}</span>
+          <span className="py-1 bg-gray-200 w-10 text-center z-10">{playerCount}</span>
           <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
         </div>
         <div className="flex justify-between mb-4">
@@ -277,8 +297,8 @@ function App() {
         <button className={`text-white z-20 font-bold text-xs dark:text-black dark:border-pink-800 ${infoOpen===true? 'hover:animate-pulse mr-2 dark:text-white':'border rounded-3xl px-3 text-white'}`} ref={menuRef} onClick={toggleInfo}>{infoOpen ? "X" : "i"}</button>
         </div>
         <div className="flex items-center justify-center mb-6 pb-5 gap-6">
-          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
-          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => modeSwitch('normaali')}>Normaali</button>
+          <button className={`transition-all duration-200 px-4 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white dark:bg-rose-500':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => modeSwitch('teekkari')}>Teekkari</button>
         </div>
             {infoOpen && (
               <div className="absolute right-[0.8rem] top-[7.3rem] z-10 w-[15rem] rounded-xl bg-black/90 p-5 pr-10 text-sm text-white dark:bg-pink-950/55 backdrop-blur-xl">
@@ -369,15 +389,15 @@ return (
       <h2 className="text-xl text-white z-10 mx-8 ">Muuta pelaajien määrää:</h2>
         <div className="flex mr-10 z-10 float-right">
           <button className="transition-opacity duration-200 px-3 py-2 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
-          <span className="px-5 py-2 bg-gray-200 z-10">{playerCount}</span>
+          <span className="text-center w-10 py-2 bg-gray-200 z-10">{playerCount}</span>
           <button className="transition-all duration-200 px-3 py-2 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
               </div>
         </div>
             <div className="flex items-center mx-8 justify-between">
          <h2 className="text-xl mb-10 text-white">Pelitila:</h2>
         <div className="flex items-center justify-center mb-6 pb-5 gap-4">
-          <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('normaali')}>Normaali</button>
-          <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => setMode('teekkari')}>Teekkari</button>
+          <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => modeSwitch('normaali')}>Normaali</button>
+          <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => modeSwitch('teekkari')}>Teekkari</button>
        </div></div>
     <div className="flex items-center mx-8 justify-between">
         <h3 className="text-white text-xl">'Spicy' kysymyksiä?</h3>

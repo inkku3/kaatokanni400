@@ -33,7 +33,6 @@ export const normalQuestions = {
     "En ole koskaan saanut tikkejä",
     "En ole koskaan ollut allerginen millekään",
     "En ole koskaan itkenyt työpaikallani",
-    "En ole koskaan kerryttänyt yli 20k nimeeni",
     "En ole koskaan omistanut Tamagotchia",
     "En ole koskaan ketjupolttanut (tupakkaa)",
     "En ole koskaan laulanut baarissa karaokea",
