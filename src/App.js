@@ -3,6 +3,7 @@ import YouTube from 'react-youtube';
 import { specialEvents } from "./specialEvents";
 import { teekkariQuestions } from "./teekkariQuestions";
 import { normalQuestions } from "./normalQuestions";
+import { performEvents } from "./performEvents";
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
@@ -12,7 +13,14 @@ function App() {
   const [playerCount, setPlayerCount] = useState(2);
   const [playerNumber, setPlayerNumber] = useState(1);
   const [mode, setMode] = useState("normaali");
+
   const [spicyMode, setSpicy] = useState(true);
+
+  const [performMode, setPerform] = useState(true);
+  const [promptHide ,setPromptHide] = useState(false);
+  const [performActive, setPerformActive] = useState(false);
+
+
   const [available, setAvailable] = useState({ never: [], tasks: [], spicy: [] });
   const [current, setCurrent] = useState("JUOMAPELI");
   const [roundsTurns, setRoundsTurns] = useState(0);
@@ -38,6 +46,9 @@ function App() {
     setDarkMode(savedMode  === 'dark' ? false : true)
 
     document.title = "Kaatokänni400";
+
+    setPerformActive(false);
+    setPromptHide(true);
 
     let handler = (event) => {
       if(!menuRef.current.contains(event.target) ){
@@ -118,6 +129,8 @@ function App() {
   };
 
   const getNextQuestion= () => {
+    setPerformActive(false);
+    setPromptHide(true);
     let type;
     if (spicyMode) {
       const chance = getRandom(1);
@@ -180,7 +193,14 @@ function App() {
     }
     const blockingEventActive = timerActive || roundsTurns > 0 || eventCooldown>0;
 
+
     if (Math.random() < 0.2 && !blockingEventActive) {
+      if(performMode && Math.random()<0.3){
+        setEventCooldown(2)
+        handlePerform();
+        return;
+      }
+
       const pool = mode === "teekkari" 
       ? specialEvents 
       : specialEvents.filter(e => e.handler !== "timer");
@@ -203,6 +223,24 @@ function App() {
         }
     }
   };
+
+const handlePerform = () => {
+    const pool = spicyMode
+    ? [...performEvents.event, ...performEvents.spicy]
+    : [performEvents.event];
+
+
+    if (!pool.length) {
+        getNextQuestion();
+        return;
+    }
+    const idx = Math.floor(getRandom(pool.length));
+    const q = pool.splice(idx, 1);
+    setAvailable(prev => ({ ...prev, pool }));
+    setPerformActive(true);
+    setCurrent(q);
+}
+
 
 
   const handleEvent = ev => {
@@ -237,6 +275,11 @@ function App() {
 
       for (const type of Object.keys(prevAv)) {
         const currentQ = prevAv[type];
+
+        if (!teekkariQuestions[type]){
+          continue;
+        }
+
         const teekkariQ = teekkariQuestions[type];
 
         if (newMode === 'teekkari'){
@@ -308,11 +351,16 @@ function App() {
               </div>
             )}
 
-      <div className="flex items-center justify-between py-2">
+      <div className="flex items-center justify-between">
         <h3 className="text-white dark:text-black">Lisätäänkö 'spicy' kysymyksiä?</h3>
         <button className={`transition-all duration-200 rounded-lg px-2 bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${spicyMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setSpicy(prev => !prev)}>x</button>
+      </div>      
+      <div className="flex items-center justify-between py-4">
+        <h3 className="text-white dark:text-black">Entä esityskysymyksiä?</h3>
+        <button className={`transition-all duration-200 rounded-lg px-2 bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${performMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setPerform(prev => !prev)}>x</button>
       </div>
-        <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa</button>
+
+        <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa!</button>
         <h3 className="text-white text-center text-sm mt-8 dark:text-black">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
         <div className="flex items-center justify-between mt-6">
           <h2 className="text-white dark:text-black">Pelin ulkonäkö:</h2>
@@ -338,9 +386,29 @@ return (
       </button>
     <h2 className="transition-all duration-800 absolute top-14 left-12 text-white text-2xl text-white font-bold leading-relaxed dark:text-rose-900">Pelaaja: {playerNumber}</h2>
     <div className="w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow mb-32 z-10 dark:bg-rose-400/10">
-      <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 dark:text-black">
-        {current}
+      <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 dark:text-black" onClick={() => setPromptHide(true)}
+      >
+        {performActive 
+        ? "Muut arvaavat, mitä sinä esität:" :
+        current}
       </h2>
+    {performActive && (
+    <div
+      className="p-4 min-h-20 text-center justify-center items-center rounded-xl bg-gray-200/70 dark:bg-white/80 cursor-pointer"
+      onClick={() => setPromptHide(!promptHide)}
+    >
+      {promptHide  ? "Anna vain vuorossa olevan pelaajan katsoa klikkaamalla." : current}
+    </div>)}
+
+
+
+
+
+
+
+
+
+
       {timerActive && (
         <div className="text-2xl text-white font-bold text-center mb-6 p-3 bg-white/15 rounded-xl animate-pulse dark:text-black">
           AIKA {formatTime(timeLeft)}
@@ -349,7 +417,7 @@ return (
     </div>
 
     {showVideoPlayer && (
-      <div className="w-full h-full absolute -inset-y-8 flex items-center justify-center bg-black/20 backdrop-blur-md z-10">
+      <div className="w-full h-full absolute flex items-center justify-center backdrop-blur-md z-10">
         <div className="p-6 bg-pink-500/10 rounded-2xl shadow max-w-3xl w-full z-10">
           <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 z-10 dark:text-black">
             {current}
@@ -386,7 +454,7 @@ return (
       
       <h1 className="transition-all duration-400 text-center w-full text-wrap break-words text-3xl font-bold mt-10 text-white z-10">Asetukset</h1>
       <div className="w-full flex items-center justify-between py-10">
-      <h2 className="text-xl text-white z-10 mx-8 ">Muuta pelaajien määrää:</h2>
+      <h2 className="text-lg text-white z-10 mx-8 ">Muuta pelaajien määrää:</h2>
         <div className="flex mr-10 z-10 float-right">
           <button className="transition-opacity duration-200 px-3 py-2 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
           <span className="text-center w-10 py-2 bg-gray-200 z-10">{playerCount}</span>
@@ -394,23 +462,27 @@ return (
               </div>
         </div>
             <div className="flex items-center mx-8 justify-between">
-         <h2 className="text-xl mb-10 text-white">Pelitila:</h2>
+         <h2 className="text-lg mb-10 text-white">Pelitila:</h2>
         <div className="flex items-center justify-center mb-6 pb-5 gap-4">
           <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${mode==='normaali'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => modeSwitch('normaali')}>Normaali</button>
           <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${mode==='teekkari'? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/90'}`} onClick={() => modeSwitch('teekkari')}>Teekkari</button>
        </div></div>
     <div className="flex items-center mx-8 justify-between">
-        <h3 className="text-white text-xl">'Spicy' kysymyksiä?</h3>
-        <button className={`transition-all duration-200 rounded-lg px-4 py-1.5 text-xl bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${spicyMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setSpicy(prev => !prev)}>x</button>
+        <h3 className="text-white text-lg">'Spicy' kysymyksiä?</h3>
+        <button className={`transition-all duration-200 rounded-lg px-3 py-1 text-xl bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${spicyMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setSpicy(prev => !prev)}>x</button>
       </div>
+     <div className="flex items-center mx-8 justify-between mt-6">
+        <h3 className="text-white text-lg">Esityskysymyksiä?</h3>
+        <button className={`transition-all duration-200 rounded-lg px-3 py-1 text-xl bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${performMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setPerform(prev => !prev)}>x</button>
+      </div>   
         <div className="flex items-center mx-8 justify-between">
-          <h2 className="text-xl mt-12 text text-white">Pelin teema</h2>
-          <button className={`transition-all mt-12 duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
+          <h2 className="text-lg text-white mt-6">Pelin teema</h2>
+          <button className={`transition-all mt-6 duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
       </div>
 
 
 
-        <h4 className="text-white text-s bottom-10 absolute mx-8">Kaatokänni400 ylläpitäjä: @inkku2 (discord).</h4>
+        <h4 className="text-white text-xs bottom-6 absolute mx-8">Kaatokänni400 ylläpitäjä: @inkku2 (discord).</h4>
       </div>
     )}
   </div> </div>
