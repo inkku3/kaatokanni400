@@ -7,12 +7,15 @@ import { performEvents } from "./performEvents";
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
+  const [playersSelected, setplayersSelected] = useState(true);
   const [currentType, setCurrentType] = useState("");
   const [menuOpen, setMenuOpen] =useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
   const [playerNumber, setPlayerNumber] = useState(1);
+  const [playerNames, setPlayerName] = useState(["",""]);
   const [mode, setMode] = useState("normaali");
+  const [firstStart, setFirstStart] = useState(false);
 
   const [spicyMode, setSpicy] = useState(true);
 
@@ -22,7 +25,7 @@ function App() {
 
 
   const [available, setAvailable] = useState({ never: [], tasks: [], spicy: [] });
-  const [current, setCurrent] = useState("JUOMAPELI");
+  const [current, setCurrent] = useState("");
   const [roundsTurns, setRoundsTurns] = useState(0);
   const [roundsName, setRoundsName] = useState("");
   const [timerActive, setTimerActive] = useState(false);
@@ -74,6 +77,45 @@ function App() {
     event.target.pauseVideo();
   };
 
+  const selectPlayers = () => {
+    setplayersSelected(!playersSelected);
+    if (firstStart){
+      setCurrent("Pelaajat valittu!")}
+    else{
+      setCurrent(<div>
+        INFO: 
+        <ul className="text-m font-medium list-disc ml-5 leading-8 mt-2 text-xl text-left">
+          <li>"En ole koskaan" = kaikki, jotka ovat tehneet asian, juovat.</li>
+          <li>Laitathan äänet täysille mallasmaratonia varten.</li>
+        </ul>
+        </div>)
+    }
+    setFirstStart(true);
+  };
+
+
+  const playerNameChanged = (number, name) => {
+    const names = [...playerNames];
+    names[number] = name;
+    setPlayerName(names);
+  };
+  const adjustPlayerCount = (count) => {
+    setPlayerNumber(count);
+
+    setPlayerName(prev => {
+      const old = [...prev];
+      if (count > old.length){
+        let difference = count-old.length
+        return[...old, ...Array(difference).fill("")];
+      }
+      else{
+        return old.slice(0,count);
+      }
+    }
+
+    )
+  }
+
   const startGame = () => {
 
     const normalPool = { never: [...normalQuestions.never],
@@ -111,14 +153,6 @@ function App() {
     setAvailable(initAvailable);
 
     setGameStarted(true);
-    setCurrent(<div>
-    INFO: 
-    <ul className="text-m font-medium list-disc ml-5 leading-8 mt-2 text-xl text-left">
-      <li>"En ole koskaan" = kaikki, jotka ovat tehneet asian, juovat.</li>
-      <li>Laitathan äänet täysille mallasmaratonia varten.</li>
-      <li>Erikoistapahtumat koskevat kaikkia.</li>
-    </ul>
-  </div>);
   };
 
   const getRandom=(max) =>{
@@ -326,15 +360,9 @@ const handlePerform = () => {
     <div className={`${darkMode ? "dark" : ""}`}>
   <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black dark:bg-white">
       <div className="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
-      <h1 className="text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4 dark:text-rose-950">Kaatokänni 400</h1>
+      <h1 className="text-center w-full text-wrap break-words text-3xl font-bold mb-2 text-white z-10 pb-4 dark:text-rose-950">Kaatokänni400</h1>
 
       <div className="bg-pink-500/10 p-6 rounded-lg w-full max-w-md z-10 dark:bg-rose-50/70 relative">
-        <h2 className="text-xl mb-4 p-2 text-white z-10 dark:text-black">Montako pelaajaa?</h2>
-        <div className="flex items-center justify-center mb-6 z-10">
-          <button className="transition-opacity duration-200 px-3 py-1 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
-          <span className="py-1 bg-gray-200 w-10 text-center z-10">{playerCount}</span>
-          <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
-        </div>
         <div className="flex justify-between mb-4">
         <h2 className="text-xl text-white dark:text-black">Miten pelataan?</h2>
         <button className={`text-white z-20 font-bold text-xs dark:text-black dark:border-pink-800 ${infoOpen===true? 'hover:animate-pulse mr-2 dark:text-white':'border rounded-3xl px-3 text-white'}`} ref={menuRef} onClick={toggleInfo}>{infoOpen ? "X" : "i"}</button>
@@ -360,12 +388,13 @@ const handlePerform = () => {
         <button className={`transition-all duration-200 rounded-lg px-2 bg-black border-2 border-rose-500 dark:bg-white dark:border-rose-400 ${performMode ? 'text-white border-2 border-rose-500 dark:text-black dark:border-rose-200': 'border-rose-800 dark:text-white'}`} onClick={() => setPerform(prev => !prev)}>x</button>
       </div>
 
-        <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Ei muuta ku juomaa!</button>
-        <h3 className="text-white text-center text-sm mt-8 dark:text-black">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
+        <button className="transition-all duration-300 w-full py-2 mt-4 bg-rose-600/90 text-white rounded-2xl hover:bg-rose-500/90" onClick={startGame}>Valitse pelaajat</button>
         <div className="flex items-center justify-between mt-6">
           <h2 className="text-white dark:text-black">Pelin ulkonäkö:</h2>
           <button className={`transition-all duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
-      </div>        
+      </div>  
+          <h3 className="text-white text-center text-xs mt-8 dark:text-black">Peli ei kannusta alkoholin käyttöön. Pelaajat vastaavat itse valinnoistaan. Kaatokänni400 suosittelee juomaksi vettä.</h3>
+      
       </div>
     </div>
     </div>
@@ -376,18 +405,22 @@ return (
 
   <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black dark:bg-white">
     
-      <div className="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
+      <div className="fixed inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
 
     
-     <button className="transition-all duration-800 absolute top-16 right-12 flex flex-col gap-1.5 hover:opacity-80 dark:border-rose-800" ref={menuRef} onClick={toggleMenu}> 
+     <button className="transition-all duration-800 absolute top-16 right-12 flex flex-col gap-1.5 hover:opacity-80 dark:border-rose-800 z-10" ref={menuRef} onClick={toggleMenu}> 
            <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
            <span className={`transition all duration-200 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
            <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
       </button>
-    <h2 className="transition-all duration-800 absolute top-14 left-12 text-white text-2xl text-white font-bold leading-relaxed dark:text-rose-900">Pelaaja: {playerNumber}</h2>
-    <div className="w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow mb-32 z-10 dark:bg-rose-400/10">
+    <div className="flex text-white text-sm bg-rose-600/20 dark:bg-rose-500/50 font-bold rounded-2xl px-5 py-3 absolute top-14 left-10 gap-1">
+      <h3 className="text-white dark:text-rose-900">Pelaaja:</h3>
+      <h2 className="text-white dark:text-rose-900">{playerNames[playerNumber-1]}</h2>
+    </div>
+    <div className="mt-[20vh] relative w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow mb-72 z-10 dark:bg-rose-400/10">
       <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 dark:text-black" onClick={() => setPromptHide(true)}
       >
+
         {performActive 
         ? "Muut arvaavat, mitä sinä esität:" :
         current}
@@ -406,7 +439,51 @@ return (
 
 
 
+    {playersSelected && (
+        <div className="align-center text-center justify-center">
+          <div className="flex justify-between items-center">
+          <h2 className="flex text-xl mb-4 p-2 font-bold text-white z-10 dark:text-black ">Montako pelaajaa?</h2>
+        <div className="flex mb-6 z-10">
+          <button className="transition-opacity duration-200 px-3 py-1 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() =>{
+              const newCount = Math.max(2, playerCount-1);
+              setPlayerCount(newCount)
+              adjustPlayerCount(newCount);
+          } }>-</button>
+          <span className="py-1 bg-gray-200 w-10 font-medium text-center z-10">{playerCount}</span>
+          <button className="transition-all duration-200 px-3 py-1 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => {
+            setPlayerCount(pc => pc + 1)
+            adjustPlayerCount(playerCount+1)}}>+</button>
+        </div></div>
+          <div className="text-s text-white font-bold text-center mb-6 p-3 dark:text-black">
+            {playerNames.map((name, i) => (
+              <div className="py-3" key={i}>
+                <label>
+                  Pelaaja {i + 1}:
+                  <input
+                    className="text-black rounded-xl py-1 px-2 mx-2"                  
+                    name="playerInput"
+                    defaultValue={playerNames[i]}
+                    onChange={e => playerNameChanged(i, e.target.value)}
+                    maxLength={15}>
+                  </input></label>
+              </div>))}
+          </div><div>
+          <button
+            className={`w-64 font-sans font-bold text-l px-4 py-3 mb-2 rounded-2xl shadow-lg
+              ${playerNames.every(name => name.trim() !== '') 
+                ? 'bg-rose-600/80 text-white hover:bg-rose-500/80 dark:bg-rose-600 dark:hover:bg-rose-600/80 cursor-pointer' 
+                : 'bg-gray-400 text-gray-200 cursor-not-allowed'}
+            `}
+            onClick={selectPlayers}
+            disabled={!playerNames.every(name => name.trim() !== '')}
+          >
+          PELIÄ!!
+          </button>
 
+            </div>
+          </div>
+
+    )}
 
 
       {timerActive && (
@@ -433,7 +510,7 @@ return (
       </div>
     )}
     
-    <div className="absolute bottom-24 w-full flex flex-col items-center">
+    {!playersSelected && (<div className="absolute bottom-24 w-full flex flex-col items-center">
       <button 
         className="w-64 font-sans font-bold text-xl px-6 py-4 mb-16 bg-rose-600/80 text-white rounded-2xl shadow-lg transform transition-transform hover:hover:bg-rose-500/80 z-10 dark:bg-rose-600 dark:hover:bg-rose-600/80"
         onClick={getNext}
@@ -448,18 +525,17 @@ return (
           </div>
         )}
       </div>
-    </div>
+    </div>)}
   {menuOpen && (
-      <div className="transition-all duration-800 w-full max-w-2xl h-[70%] top-30 absolute bg-black/80 z-10 rounded-xl backdrop-blur-md shadow-2xl dark:bg-pink-950/55">
+      <div className="transition-all duration-800 w-full max-w-2xl h-[70%] top-[15vh] absolute bg-black/80 z-10 rounded-xl backdrop-blur-md shadow-2xl dark:bg-pink-950/55">
       
       <h1 className="transition-all duration-400 text-center w-full text-wrap break-words text-3xl font-bold mt-10 text-white z-10">Asetukset</h1>
       <div className="w-full flex items-center justify-between py-10">
-      <h2 className="text-lg text-white z-10 mx-8 ">Muuta pelaajien määrää:</h2>
-        <div className="flex mr-10 z-10 float-right">
-          <button className="transition-opacity duration-200 px-3 py-2 bg-rose-300/90 rounded-l z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => Math.max(2, pc - 1))}>-</button>
-          <span className="text-center w-10 py-2 bg-gray-200 z-10">{playerCount}</span>
-          <button className="transition-all duration-200 px-3 py-2 bg-rose-300/90 rounded-r z-10 hover:bg-rose-200" onClick={() => setPlayerCount(pc => pc + 1)}>+</button>
-              </div>
+    <h2 className="text-lg text-white">Muuta pelaajia:</h2>
+        <button className={`mt-6 duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => {
+          setCurrent("")
+          setMenuOpen(!menuOpen)
+          setplayersSelected(true)}}>Asetukset</button>
         </div>
             <div className="flex items-center mx-8 justify-between">
          <h2 className="text-lg mb-10 text-white">Pelitila:</h2>
