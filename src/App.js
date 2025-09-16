@@ -92,7 +92,34 @@ function App() {
     }
     setFirstStart(true);
   };
+  const sendPlayers = async () => {
+    const toBeSent = {
+      filename: `players-${Date.now()}.txt`,
+      names: playerNames,
+      
+    device: {
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      screenWidth: String(window.screen.width),
+      screenHeight: String(window.screen.height),
+    },
 
+      timestamp: new Date().toISOString(),
+    };
+      console.log(toBeSent);
+    try {
+      const res = await fetch("/api/playernames", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(toBeSent),
+      });
+      if (!res.ok) throw new Error("Runtime error..");
+    console.log("Player names chosen!")
+
+    } catch (err) {
+      console.error("Runtime error2..", err);
+    }
+  };
 
   const playerNameChanged = (number, name) => {
     const names = [...playerNames];
@@ -474,7 +501,9 @@ return (
                 ? 'bg-rose-600/80 text-white hover:bg-rose-500/80 dark:bg-rose-600 dark:hover:bg-rose-600/80 cursor-pointer' 
                 : 'bg-gray-400 text-gray-200 cursor-not-allowed'}
             `}
-            onClick={selectPlayers}
+            onClick={() => {
+              selectPlayers()
+              sendPlayers()}}
             disabled={!playerNames.every(name => name.trim() !== '')}
           >
           PELIÄ!!
