@@ -50,11 +50,21 @@ export const teekkariQuestions = {
     "En ole koskaan huoltanut lakkini tupsua",
     "En ole koskaan päässyt tenttiä vasta 3. kerralla läpi.",
     "En ole koskaan opiskellut aiempaa tutkintoa",
-    "En ole koskaan käynyt Konetalon EXAM-luokassa"
+    "En ole koskaan käynyt Konetalon EXAM-luokassa",
+    "En ole koskaan osallistunut Wappuun",
+    "En ole koskaan käynyt krapulassa luennolla/harkassa, tms.",
+    "En ole koskaan käynyt humalassa luennolla/harkassa, tms.",
+    "En ole koskaan kärsinyt huijarisyndroomasta opiskelujeni suhteen",
+    "En ole koskaan käynyt TUTA luennolla",
+    "En ole koskaan kulkenut kolmiobussilla"
   ],
   tasks: [
     "Kaikki, jotka eivät osaa heti kertoa mikä on Bolzanon lause juovat",
-    "Se, joka kertoo ekana järjestysluvun kalsiumille saa antaa 3 hörppyä.",
+    "Jos lakkisi päällinen on enemmän värillinen, kuin valkoinen, juo",
+    "Näytä lempi haalarimerkkisi haalareistasi.",
+    "Lempparikurssisi? Jos muut vihaavat sitä, juot.",
+    "Mikä on lempi opiskelijatapahtumasi? Jos se ei ole alkoholiton, juo",
+    "Se, joka kertoo ekana järjestysluvun kalsiumille saa antaa 3 hörppyä. Saa googlaa!",
     "Flirttaile kuin average teekkari",
     "Selitä Newtonin 3. laki. Jos et osaa, shotti.",
     "Selitä mitä siis oikeasti opiskelet?",
@@ -63,17 +73,27 @@ export const teekkariQuestions = {
     "Viimeisin kurssiarvosanasi = montako annat",
     "Jos et ole päässyt läpi pakollisesta kurssista, otat shotin",
     "Kuka ravaa uusintatenteissä? Hänelle shotti.",
-    "Olisitko halunnut opiskelemaan jotain muuta?",
+    "Kerro, olisitko halunnut opiskelemaan jotain muuta?",
     "Rehellisesti, pidätkö killastasi?",
     "Tee lakillasi helikopteri. Jos ei ole hattusesonki, pakko juoda...",
     "Onko suvussasi teekkareita? Juo, jos on.",
     "Juo 1 per jokainen teekkarikaverisi",
-    "Juo 1 per jokainen humanistikaverisi"
+    "Juo 1 per jokainen humanistikaverisi",
+    "Jos et asu Hervannassa, juo",
+    "Kerro oudoin kokemuksesi Hervannasta",
+    "Juo 1 per vuosi mitä läppärisi on vanha",
+    "Opiskelujen ohella töissä käyvät juovat tuskaansa",
+    "Juo 1 per jokainen yo-kirjoitusten L/E",
+    "Kerro mikä on imaginaariluku, tai juo",
+    "Juo 1 per kaverisi, joka asuu Hervannassa",
+    "Luetelkaa eri kiltoja vuorotellen. Joka ei keksi enää, juo."
   ],
   spicy: [
     "En ole koskaan käynyt treffeillä teekkarin kanssa",
     "En ole koskaan harrastanut seksiä teekkarin kanssa",
     "En ole koskaan suudellut kampuksella",
-    "En ole koskaan ihastunut teekkariin"
+    "En ole koskaan ihastunut teekkariin",
+    "Millä killalla on parhaimman näköiset opiskelijat? Äänestäkää voittaja, eri mieltä olevat juo.",
+    "En ole koskaan pokannut jotakuta opiskelijatapahtumassa"
   ],
 };
