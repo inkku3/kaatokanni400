@@ -431,11 +431,10 @@ return (
       <div className={`${darkMode ? "dark" : ""}`}>
 
   <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-black dark:bg-white">
-    
-      <div className="fixed inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
+      <div className="md:fixed absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1639054019624-e441fb653ea6')] bg-[url('https://images.unsplash.com/photo-1644525630215-57f94441da72')] bg-cover bg-center blur-sm brightness-50 dark:brightness-100 dark:opacity-30 z-0"></div>  
 
     
-     <button className="transition-all duration-800 absolute top-16 right-12 flex flex-col gap-1.5 hover:opacity-80 dark:border-rose-800 z-10" ref={menuRef} onClick={toggleMenu}> 
+     <button className="transition-all duration-800 absolute top-16 right-12 flex flex-col gap-1.5 hover:opacity-80 dark:border-rose-800 z-20" ref={menuRef} onClick={toggleMenu}> 
            <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
            <span className={`transition all duration-200 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
            <span className={`transition-all duration-900 block bg-white w-10 h-1 rounded-xl dark:bg-rose-900 ${menuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
@@ -448,7 +447,7 @@ return (
         )}
       <div className="mt-[20vh] relative w-full max-w-2xl rounded-3xl bg-pink-500/10 backdrop-blur-sm p-6 shadow mb-72 z-10 dark:bg-rose-400/10">
       <h2 className="text-center text-2xl text-white font-bold leading-relaxed p-2 mb-4 dark:text-black" onClick={() => setPromptHide(true)}>
-        {performActive 
+      {performActive 
         ? "Tyyli vapaa. Muut arvaavat, sinä esität:" :
         current}
       </h2>
@@ -556,7 +555,8 @@ return (
       </div>
     </div>)}
   {menuOpen && (
-      <div className="transition-all duration-800 w-full max-w-2xl h-[70%] top-[15vh] absolute bg-black/80 z-10 rounded-xl backdrop-blur-md shadow-2xl dark:bg-pink-950/55">
+      <div className="h-full w-full backdrop-blur-md absolute z-10 transition-all duration-800">
+      <div className="transition-all duration-800 left-1/2 -translate-x-1/2 w-full max-w-2xl h-[70vh] top-[15vh] absolute bg-black/80 z-10 rounded-xl backdrop-blur-md shadow-2xl dark:bg-pink-950/55">
       
       <h1 className="transition-all duration-400 text-center w-full text-wrap break-words text-3xl font-bold mt-10 text-white z-10">Asetukset</h1>
         <div className="flex items-center mx-8 justify-between">
@@ -584,11 +584,8 @@ return (
           <h2 className="text-lg text-white mt-6">Pelin teema:</h2>
           <button className={`transition-all mt-6 duration-200 px-3 py-2 rounded-lg ${darkMode==true? 'bg-rose-600/80 hover:bg-rose-500/80 text-white':'bg-gray-300/90 hover:bg-gray-200/80'}`} onClick={() => toggleDisplayMode()}>{darkMode ? "Tumma tila" : "Vaalea tila"}</button>
       </div>
-
-
-
         <h4 className="text-white text-xs bottom-6 absolute mx-8">Kaatokänni400 ylläpitäjä: @inkku2 (discord).</h4>
-      </div>
+      </div></div>
     )}
   </div> </div>
   

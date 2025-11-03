@@ -56,9 +56,16 @@ export const teekkariQuestions = {
     "En ole koskaan käynyt humalassa luennolla/harkassa, tms.",
     "En ole koskaan kärsinyt huijarisyndroomasta opiskelujeni suhteen",
     "En ole koskaan käynyt TUTA luennolla",
-    "En ole koskaan kulkenut kolmiobussilla"
-  ],
+    "En ole koskaan kulkenut kolmiobussilla",
+    "En ole koskaan käynyt skellarissa",
+    "Äänestäkää paras nuudelimaku/merkki, eri mieltä olevat juovat",
+    "En ole koskaan käynyt teekkarien pj-risteilyllä",
+    "En ole koskaan eksynyt Hervantaan",
+    "En ole koskaan hävennyt teekkaria",
+    "En ole koskaan kokenut ylpeyttä teekkariudestani"
+    ],
   tasks: [
+    "Näytä hauskin telegram profiilikuvasi ja kerro sen taustatarina",
     "Kaikki, jotka eivät osaa heti kertoa mikä on Bolzanon lause juovat",
     "Jos lakkisi päällinen on enemmän värillinen, kuin valkoinen, juo",
     "Näytä lempi haalarimerkkisi haalareistasi.",

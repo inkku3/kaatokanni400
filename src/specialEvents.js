@@ -5,6 +5,7 @@ export const specialEvents = [
   { text: "'KEISARI' = juo.", handler: "youtube", videoId: "UfrdOr-OAPA"},
   { text: "'PLEASE' = juo.", handler: "youtube", videoId: "YiQ7qiL73aI"},
   { text: "'THUNDER' = juo.", handler: "youtube", videoId: "fKopy74weus"},
+  { text: "'JUON' = juo.", handler: "youtube", videoId: "kUYoefkaw30"},
   { text: "Valitse kielletty sana, jota ei saa sanoa seuraavan kierroksen aikana! Rangaistus on juominen.", handler: "rounds", roundsName: "KIELLETTY SANA", roundLength: "1"},
   { text: "Kaikki laittavat mitä tahansa hatuksi. Jos jonkun hattu tippuu kierroksen aikana, hän juo.", handler: "rounds", roundsName: "HATTUAIKA", roundLength: "1"},
   { text: "10min mallasmaraton: 50ml juomaa per PIIP. Alko jo!", handler: "timer", minutes: "10"},
